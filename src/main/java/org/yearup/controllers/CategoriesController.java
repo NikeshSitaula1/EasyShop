@@ -58,19 +58,27 @@ public class CategoriesController
 
     // add annotation to call this method for a POST action
     // add annotation to ensure that only an ADMIN can call this function
-    @PostMapping("")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("")
+    @ResponseStatus(value = HttpStatus.CREATED)
     //@RequestMapping(path = "/categories/{id}", method = RequestMethod.POST)
     public Category addCategory(@RequestBody Category category)
     {
         // insert the category
-        return categoryDao.create(category);
+        try
+        {
+            return categoryDao.create(category);
+        }
+        catch(Exception ex)
+        {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
+        }
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
-    @PutMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("{id}")
     public void updateCategory(@PathVariable int id, @RequestBody Category category)
     {
         // update the category by id
@@ -86,9 +94,9 @@ public class CategoriesController
 
     // add annotation to call this method for a DELETE action - the url path must include the categoryId
     // add annotation to ensure that only an ADMIN can call this function
-
-    @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id)
     {
         try
@@ -100,6 +108,5 @@ public class CategoriesController
         {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
-
     }
 }
