@@ -65,7 +65,7 @@ public class CategoriesController
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     @ResponseStatus(value = HttpStatus.CREATED)
-    //@RequestMapping(path = "/categories/{id}", method = RequestMethod.POST)
+    //@RequestMapping(path = "", method = RequestMethod.POST)
     public Category addCategory(@RequestBody Category category)
     {
         // insert the category
