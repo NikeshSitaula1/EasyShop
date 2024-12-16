@@ -65,7 +65,6 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao
         } catch (SQLException e) {
             throw new RuntimeException("Error fetching category by ID", e);
         }
-
         return null;
     }
 
