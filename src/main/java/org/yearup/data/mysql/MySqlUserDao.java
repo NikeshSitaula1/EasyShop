@@ -122,7 +122,6 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
         {
             System.out.println(e);
         }
-
         return null;
     }
 
@@ -135,7 +134,6 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
         {
             return user.getId();
         }
-
         return -1;
     }
 
