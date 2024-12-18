@@ -95,7 +95,7 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
     }
 
     @Override
-    public void update(Profile profile)
+    public Profile update(Profile profile)
     {
         // update category
         String sql = """
@@ -119,12 +119,14 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
             query.setInt(9, profile.getUserId());
 
             query.executeUpdate();
+
+            return profile;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-
+    
     private Profile mapRow(ResultSet row) throws SQLException
     {
         int userId = row.getInt("user_id");

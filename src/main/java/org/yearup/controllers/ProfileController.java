@@ -6,8 +6,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProfileDao;
+import org.yearup.data.UserDao;
 import org.yearup.models.Profile;
+import org.yearup.models.User;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -16,10 +19,12 @@ import java.util.List;
 
 public class ProfileController {
     private ProfileDao profileDao;
+    private UserDao userDao;
 
     @Autowired
-    public ProfileController(ProfileDao profileDao){
+    public ProfileController(ProfileDao profileDao, UserDao userDao){
         this.profileDao = profileDao;
+        this.userDao = userDao;
     }
 
     @PreAuthorize("permitAll()")
@@ -28,26 +33,29 @@ public class ProfileController {
         return profileDao.create(profile);
     }
 
-    @PreAuthorize("permitAll()")
-    @GetMapping("{userId}")
-    public Profile getByUserId(@PathVariable int userId){
-        Profile profile = profileDao.getByUserId(userId);
+    @GetMapping()
+    public Profile getByUserId(Principal principal){
 
+        String username = principal.getName();
+        User user = userDao.getByUserName(username);
+
+        // get profile by id
+        Profile profile = profileDao.getByUserId(user.getId());
         if (profile == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return profile;
     }
 
-    @PreAuthorize("permitAll()")
-    @GetMapping("")
-    public List<Profile> getAllProfile(){
-        return profileDao.getAllProfiles();
-    }
-
-    @PreAuthorize("permitAll()")
     @PutMapping()
-    public void update(@RequestBody Profile profile){
-        profileDao.update(profile);
+    public Profile updateProfile(@RequestBody Profile profile, Principal principal) {
+
+        String username = principal.getName();
+        int userId = userDao.getByUserName(username).getId();
+        profile.setUserId(userId);
+        // Perform the update in the DAO layer and fetch the updated profile
+        Profile updatedProfile = profileDao.update(profile);
+        // Return the updated profile to the client
+        return updatedProfile;
     }
 }
