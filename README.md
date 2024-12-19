@@ -13,7 +13,6 @@ EasyShop is an e-commerce application designed to provide users with a seamless 
 - [Phases Overview](#Phases-Overview)
 - [Getting Started](#Getting-Started)
 - [Interesting Code](#Interesting-Code)
-- [Contributing](#Contributing)
 - [License](#License)
 
 ---
@@ -62,6 +61,8 @@ EasyShop is an e-commerce application designed to provide users with a seamless 
   ![Bug1](https://raw.githubusercontent.com/NikeshSitaula1/EasyShop/refs/heads/main/images/bug%201.png)
 
 - **Bug 2:** Resolved duplication issues during product updates by ensuring existing products are updated instead of creating new entries.
+  ![Bug2](https://raw.githubusercontent.com/NikeshSitaula1/EasyShop/refs/heads/main/images/bug%202.png)
+
 ### Phase 3 - Shopping Cart
 - Developed the shopping cart feature, enabling users to:
     - Add products to their cart.
@@ -117,7 +118,21 @@ EasyShop is an e-commerce application designed to provide users with a seamless 
 - Do the same for 2 more users named, `user` and `george`.
 - Send, copy the tokens they provide and paste it on the Authorization as Bearer tokens.
 
+---
+
 ## Interesting Code
 
 ![InterestingCode](https://raw.githubusercontent.com/NikeshSitaula1/EasyShop/refs/heads/main/images/intersting%20code.png)
 
+This method further gives an evidence of how one can combine authentication with the operations 
+of the DAO. It obtains user data in an acceptable manner by using the Principal of the logged in
+user and takes the profile out of the database. In java, Principal is an interface that 
+provides authenticated user information.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
