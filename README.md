@@ -59,8 +59,9 @@ EasyShop is an e-commerce application designed to provide users with a seamless 
 
 ### Phase 2 - Bug Fixes
 - **Bug 1:** Fixed incorrect product search results by optimizing SQL queries and handling query parameters correctly.
-- **Bug 2:** Resolved duplication issues during product updates by ensuring existing products are updated instead of creating new entries.
+  ![Bug1](https://raw.githubusercontent.com/NikeshSitaula1/EasyShop/refs/heads/main/images/bug%201.png)
 
+- **Bug 2:** Resolved duplication issues during product updates by ensuring existing products are updated instead of creating new entries.
 ### Phase 3 - Shopping Cart
 - Developed the shopping cart feature, enabling users to:
     - Add products to their cart.
@@ -118,5 +119,5 @@ EasyShop is an e-commerce application designed to provide users with a seamless 
 
 ## Interesting Code
 
-
+![InterestingCode](https://raw.githubusercontent.com/NikeshSitaula1/EasyShop/refs/heads/main/images/intersting%20code.png)
 
