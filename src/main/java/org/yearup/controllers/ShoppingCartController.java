@@ -39,9 +39,9 @@ public class ShoppingCartController
 
 
     // each method in this controller requires a Principal object as a parameter
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping()
-    public ResponseEntity<ShoppingCart> getCart(Principal principal)
+    public ShoppingCart getCart(Principal principal)
     {
         try
         {
@@ -54,7 +54,7 @@ public class ShoppingCartController
             ShoppingCart cart = shoppingCartDao.getByUserId(userId);
 
             // use the shoppingCartDao to get all items in the cart and return the cart
-            return ResponseEntity.ok(cart);
+            return cart;
         }
         catch(Exception e)
         {
@@ -64,7 +64,7 @@ public class ShoppingCartController
 
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/products/{productId}")
     public ShoppingCart addToCart(Principal principal, @PathVariable int productId) {
         try {
@@ -94,7 +94,7 @@ public class ShoppingCartController
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
-
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/products/{productId}")
     public void updateProductInCart(@PathVariable int productId,
                                     @RequestBody ShoppingCartItem item,
@@ -119,6 +119,7 @@ public class ShoppingCartController
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
+    @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
     public void clearCart(Principal principal) {
