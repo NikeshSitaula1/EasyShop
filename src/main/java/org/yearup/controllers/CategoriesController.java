@@ -21,7 +21,7 @@ public class CategoriesController
     private CategoryDao categoryDao;
     private ProductDao productDao;
 
-    // create an Autowired controller to inject the categoryDao and ProductDao
+    // Autowired controller to inject the categoryDao and ProductDao
     @Autowired
     public CategoriesController(CategoryDao categoryDao, ProductDao productDao) {
         this.categoryDao = categoryDao;
@@ -31,7 +31,6 @@ public class CategoriesController
     @GetMapping("")
     public List<Category> getAll()
     {
-        // find and return all categories
         return categoryDao.getAllCategories();
     }
 
@@ -47,13 +46,13 @@ public class CategoriesController
         return category;
     }
 
-    // the url to return all products in category 1 would look like this
-    // https://localhost:8080/categories/1/products
+    // the url to return all products in category
     @GetMapping("{categoryId}/products")
     public List<Product> getProductsById(@PathVariable int categoryId)
     {
         // get a list of product by categoryId
         return productDao.listByCategoryId(categoryId);
+
     }
 
     // call this method for a POST action

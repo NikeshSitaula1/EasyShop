@@ -3,6 +3,7 @@ package org.yearup.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.ProductDao;
@@ -90,14 +91,14 @@ public class ShoppingCartController
         }
     }
 
-
-
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
 
     @PutMapping("/products/{productId}")
-    public void updateProductInCart(@PathVariable int productId, @RequestBody ShoppingCartItem item, Principal principal) {
+    public void updateProductInCart(@PathVariable int productId,
+                                    @RequestBody ShoppingCartItem item,
+                                    Principal principal) {
         try {
             String username = principal.getName();
             User user = userDao.getByUserName(username);
@@ -118,28 +119,19 @@ public class ShoppingCartController
 
     // add a DELETE method to clear all products from the current users cart
     // https://localhost:8080/cart
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping
-    public ResponseEntity<Void> clearCart(Principal principal) {
+    public void clearCart(Principal principal) {
         try {
-            // Ensure the user is authenticated
             if (principal == null) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User must be logged in.");
             }
 
-            // Get the logged-in user's username
             String userName = principal.getName();
             User user = userDao.getByUserName(userName);
-            int userId = user.getId();
-
-            // Clear the user's shopping cart
-            shoppingCartDao.clearCart(userId);
-
-            // Return HTTP 204 No Content
-            return ResponseEntity.noContent().build();
+            shoppingCartDao.clearCart(user.getId());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to clear the cart.", e);
         }
     }
-
-
 }

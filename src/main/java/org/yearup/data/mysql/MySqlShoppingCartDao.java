@@ -1,7 +1,6 @@
 package org.yearup.data.mysql;
 
 import org.springframework.stereotype.Component;
-import org.yearup.data.ProductDao;
 import org.yearup.models.ShoppingCart;
 import org.yearup.models.ShoppingCartItem;
 import org.yearup.data.ShoppingCartDao;
@@ -123,8 +122,6 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
         }
     }
 
-
-
     private Product mapRow(ResultSet resultSet) throws SQLException {
         int productId = resultSet.getInt("product_id");
         String name = resultSet.getString("name");
@@ -138,7 +135,5 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
         return new Product(productId, name, price, categoryId, description, color, stock, isFeatured, imageUrl);
     }
-
-
 }
 
