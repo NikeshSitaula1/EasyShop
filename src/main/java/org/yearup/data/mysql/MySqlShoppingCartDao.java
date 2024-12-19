@@ -17,14 +17,13 @@ import java.sql.SQLException;
 @Component
 public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDao {
 
-
     public MySqlShoppingCartDao(DataSource dataSource, MySqlProductDao productDao) {
         super(dataSource);
     }
 
     @Override
     public ShoppingCart getByUserId(int userId) {
-        ShoppingCart cart = new ShoppingCart();
+        ShoppingCart cart = new ShoppingCart(); // Create an empty shopping cart
         String sql = """
         SELECT sc.product_id, sc.quantity, p.name, p.price, p.category_id, p.description,
                p.color, p.stock, p.featured, p.image_url
@@ -35,24 +34,26 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, userId);
+            statement.setInt(1, userId); // Set the user ID for the query
 
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
+                // Map the result set row to a Product object
                 Product product = mapRow(resultSet);
                 int quantity = resultSet.getInt("quantity");
 
+                // Create a shopping cart item and add it to the cart
                 ShoppingCartItem item = new ShoppingCartItem();
                 item.setProduct(product);
                 item.setQuantity(quantity);
 
-                cart.add(item); // Add the item to the cart
+                cart.add(item);// Add the item to the cart
             }
+
         } catch (SQLException e) {
             throw new RuntimeException("Failed to retrieve shopping cart.", e);
         }
-
         return cart;
     }
 
@@ -71,14 +72,14 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             ResultSet resultSet = checkStatement.executeQuery();
 
             if (resultSet.next()) {
-                // If it exists, update the quantity
+                // Update the quantity if the product already exists in the cart
                 PreparedStatement updateStatement = connection.prepareStatement(sqlUpdate);
                 updateStatement.setInt(1, item.getQuantity());
                 updateStatement.setInt(2, userId);
                 updateStatement.setInt(3, item.getProduct().getProductId());
                 updateStatement.executeUpdate();
             } else {
-                // Otherwise, insert a new row
+                // Insert a new row for the product if it's not in the cart
                 PreparedStatement insertStatement = connection.prepareStatement(sqlInsert);
                 insertStatement.setInt(1, userId);
                 insertStatement.setInt(2, item.getProduct().getProductId());
@@ -100,9 +101,9 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, quantity);
-            statement.setInt(2, userId);
-            statement.setInt(3, productId);
+            statement.setInt(1, quantity); // Set the new quantity
+            statement.setInt(2, userId); // Set the user ID
+            statement.setInt(3, productId); // Set the product ID
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -115,13 +116,14 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, userId);
+            statement.setInt(1, userId); // Set the user ID to clear the cart for
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to clear the shopping cart.", e);
         }
     }
 
+    // Helper method
     private Product mapRow(ResultSet resultSet) throws SQLException {
         int productId = resultSet.getInt("product_id");
         String name = resultSet.getString("name");
