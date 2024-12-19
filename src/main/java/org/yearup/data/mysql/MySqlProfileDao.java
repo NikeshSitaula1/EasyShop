@@ -72,27 +72,6 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         return null;
     }
 
-    @Override
-    public List<Profile> getAllProfiles()
-    {
-        List<Profile> profile = new ArrayList<>();
-        String sql = """
-            SELECT *
-            FROM profiles;
-            """;
-
-        try (Connection connection = getConnection();
-             PreparedStatement query = connection.prepareStatement(sql);
-             ResultSet results = query.executeQuery()) {
-
-            while (results.next()) {
-                profile.add(mapRow(results));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error fetching all categories", e);
-        }
-        return profile;
-    }
 
     @Override
     public Profile update(Profile profile)
@@ -154,5 +133,4 @@ public class MySqlProfileDao extends MySqlDaoBase implements ProfileDao
         }};
         return profile;
     }
-
 }
